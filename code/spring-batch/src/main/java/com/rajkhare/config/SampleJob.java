@@ -1,5 +1,6 @@
 package com.rajkhare.config;
 
+import com.rajkhare.service.SecondTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -22,10 +23,14 @@ public class SampleJob {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @Autowired
+    private SecondTasklet secondTasklet;
+
     @Bean
     public Job firstJob() {
         return jobBuilderFactory.get("First Job")
                 .start(firstStep())
+                .next(secondStep())
                 .build();
     }
 
@@ -44,5 +49,21 @@ public class SampleJob {
             }
         };
     }
+
+    private Step secondStep() {
+        return stepBuilderFactory.get("Second Step")
+                .tasklet(secondTasklet)
+                .build();
+    }
+
+    /*private Tasklet secondTask() {
+        return new Tasklet() {
+            @Override
+            public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+                System.out.println("This is second Tasklet Step");
+                return RepeatStatus.FINISHED;
+            }
+        };
+    }*/
 
 }

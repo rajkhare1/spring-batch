@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableBatchProcessing
-@ComponentScan("com.rajkhare.config")
+@ComponentScan({"com.rajkhare.config","com.rajkhare.service"})
 public class SpringBatchApplication {
 
 	public static void main(String[] args) {
