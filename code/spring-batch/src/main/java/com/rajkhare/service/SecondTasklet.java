@@ -1,5 +1,6 @@
 package com.rajkhare.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -7,10 +8,12 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class SecondTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-        System.out.println("This is second Tasklet Step");
+        log.info("This is second Tasklet Step");
+        log.info("{}",chunkContext.getStepContext().getJobExecutionContext());
         return RepeatStatus.FINISHED;
     }
 }
