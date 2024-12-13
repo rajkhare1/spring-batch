@@ -1,6 +1,7 @@
 package com.rajkhare.config;
 
 import com.rajkhare.listener.FirstJobListener;
+import com.rajkhare.listener.FirstStepListener;
 import com.rajkhare.service.SecondTasklet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -18,7 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Slf4j
 public class SampleJob {
 
     @Autowired
@@ -33,7 +33,10 @@ public class SampleJob {
     @Autowired
     private FirstJobListener firstJobListener;
 
-    @Bean
+    @Autowired
+    private FirstStepListener firstStepListener;
+
+//    @Bean
     public Job firstJob() {
         return jobBuilderFactory.get("First Job")
                 .incrementer(new RunIdIncrementer())
@@ -46,6 +49,7 @@ public class SampleJob {
     private Step firstStep() {
         return stepBuilderFactory.get("First Step")
                 .tasklet(firstTask())
+                .listener(firstStepListener)
                 .build();
     }
 
@@ -53,7 +57,8 @@ public class SampleJob {
         return new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                log.info("This is first Tasklet Step");
+                System.out.println("This is first Tasklet Step");
+                System.out.println("SEC::: "+chunkContext.getStepContext().getJobExecutionContext());
                 return RepeatStatus.FINISHED;
             }
         };
@@ -74,5 +79,12 @@ public class SampleJob {
             }
         };
     }*/
+
+    @Bean
+    public Job secondJob() {
+        return  jobBuilderFactory.get("Second Job")
+                .incrementer(new RunIdIncrementer())
+                .build();
+    }
 
 }
