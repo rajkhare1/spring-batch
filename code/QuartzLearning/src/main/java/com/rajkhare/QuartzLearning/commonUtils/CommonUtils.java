@@ -18,6 +18,22 @@ public class CommonUtils {
                 .build();
     }
 
+    public JobDetail getJobDetail(Class className) {
+
+        return JobBuilder.newJob(className)
+                .withIdentity(className.getSimpleName(), "grp1")
+                .build();
+    }
+
+    public Trigger getTriggerByCronExpression(Class className, String cronExpression) {
+
+        return TriggerBuilder.newTrigger()
+                .withIdentity(className.getSimpleName())
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .build();
+    }
+
+
     public Trigger getTriggerInfoOfJob(Class className, TriggerInfo info) {
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.
                 simpleSchedule()

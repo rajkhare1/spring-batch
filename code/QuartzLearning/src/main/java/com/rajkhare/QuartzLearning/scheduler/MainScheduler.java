@@ -39,6 +39,17 @@ public class MainScheduler {
         }
     }
 
+    public void scheduleJob(Class className, String cronExpression) {
+
+        try {
+            JobDetail jobDetail = commonUtils.getJobDetail(className);
+            Trigger trigger = commonUtils.getTriggerByCronExpression(className, cronExpression);
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @PreDestroy
     public void closeScheduler() {
         try {
